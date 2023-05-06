@@ -21,6 +21,6 @@
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
 
-    <context:component-scan base-package="com.eightbit.view" />
+    <context:component-scan base-package="com.eightbit.view_controller" />
 
 </beans:beans>
