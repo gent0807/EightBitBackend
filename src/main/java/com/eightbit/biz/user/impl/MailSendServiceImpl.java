@@ -5,7 +5,11 @@ import org.springframework.stereotype.Service;
 
 @Service("mailSendService")
 public class MailSendServiceImpl implements MailSendService {
-    public int sendAuthNumToEmail(String email){
-        return 1;
+    public String sendAuthNumToEmail(String email){
+        return "1234";
+    }
+
+    public void sendPasswordToEmail(String email){
+
     }
 }

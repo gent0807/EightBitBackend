@@ -40,7 +40,5 @@ public class UserServiceImpl implements UserService {
         userSpingDAO.deleteUser(userVO);
     }
 
-    public void sendAuthNumToEmail(String email){
 
-    }
 }

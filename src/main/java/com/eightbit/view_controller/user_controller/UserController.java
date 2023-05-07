@@ -60,8 +60,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/send_num_to_email")
-    public int sendAuthNumToEmail(@RequestParam String email){
+    public String sendAuthNumToEmail(@RequestParam String email){
         return mailSendService.sendAuthNumToEmail(email);
+    }
+
+    @PostMapping(value = "/find_password")
+    public void sendPasswordToEmail(@RequestParam String email){
+        mailSendService.sendPasswordToEmail(email);
     }
 
 
