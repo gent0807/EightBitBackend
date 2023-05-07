@@ -23,25 +23,25 @@ public class UserController {
     @Qualifier("mailSendService")
     private MailSendService mailSendService;
 
-    @GetMapping(value = "/alreadyEmailRegisterCheck", produces = "text/plain; charset=UTF-8")
+    @GetMapping(value = "/alreadyEmailRegisterCheck",produces ="text/plain; charset=UTF-8")
     public String alreadyEmailRegisterCheck(UserVO userVO){
         String alreadyEmailRegister="no";
         alreadyEmailRegister=userService.alreadyEmailRegisterCheck(userVO,alreadyEmailRegister);
         return alreadyEmailRegister;
     }
 
-    @GetMapping(value = "/alreadyNickRegisterCheck", produces = "text/plain; charset=UTF-8")
-    public String alreadyNickRegisterCheck(UserVO userVO){
+    @PostMapping(value = "/alreadyNickRegisterCheck")
+    public String alreadyNickRegisterCheck(@RequestBody UserVO userVO){
         String alreadyNickRegister="no";
         alreadyNickRegister=userService.alreadyNickRegisterCheck(userVO,alreadyNickRegister);
         return alreadyNickRegister;
     }
     @PostMapping(value = "/insert")
-    public void insertUser(UserVO userVO){
+    public void insertUser(@RequestBody UserVO userVO){
         userService.insertUser(userVO);
     }
 
-    @GetMapping(value = "/loginCheck", produces = "text/plain; charset=UTF-8")
+    @GetMapping(value = "/loginCheck", produces ="text/plain; charset=UTF-8")
     public String loginCheck(UserVO userVO){
         String loginPossible="no";
         loginPossible=userService.loginCheck(userVO,loginPossible);
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/update")
-    public void updateUser(UserVO userVO){
+    public void updateUser(@RequestBody UserVO userVO){
         userService.updateUser(userVO);
     }
 
@@ -59,8 +59,8 @@ public class UserController {
         userService.deleteUser(userVO);
     }
 
-    @GetMapping(value = "/send_num_to_email", produces = {MediaType.APPLICATION_JSON_UTF8_VALUE,MediaType.APPLICATION_XML_VALUE})
-    public int sendAuthNumToEmail(@RequestParam("email") String email){
+    @PostMapping(value = "/send_num_to_email")
+    public int sendAuthNumToEmail(@RequestParam String email){
         return mailSendService.sendAuthNumToEmail(email);
     }
 
