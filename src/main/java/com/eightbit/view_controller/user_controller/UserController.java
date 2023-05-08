@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user/*")
 public class UserController {
@@ -23,17 +24,21 @@ public class UserController {
     @Qualifier("mailSendService")
     private MailSendService mailSendService;
 
-    @GetMapping(value = "/alreadyEmailRegisterCheck",produces ="text/plain; charset=UTF-8")
+    @GetMapping(value = "/alreadyEmailRegisterCheck",produces="text/plain; charset=UTF-8")
     public String alreadyEmailRegisterCheck(UserVO userVO){
+        System.out.println("이메일 존재 확인 요청 접수");
+        System.out.println(userVO);
         String alreadyEmailRegister="no";
-        alreadyEmailRegister=userService.alreadyEmailRegisterCheck(userVO,alreadyEmailRegister);
+        alreadyEmailRegister=userService.alreadyEmailRegisterCheck(userVO.getEmail(),alreadyEmailRegister);
         return alreadyEmailRegister;
     }
 
-    @PostMapping(value = "/alreadyNickRegisterCheck")
-    public String alreadyNickRegisterCheck(@RequestBody UserVO userVO){
+    @GetMapping(value = "/alreadyNickRegisterCheck",produces ="text/plain; charset=UTF-8")
+    public String alreadyNickRegisterCheck(UserVO userVO){
+        System.out.println("닉네임 존재 확인 요청 접수");
+        System.out.println(userVO);
         String alreadyNickRegister="no";
-        alreadyNickRegister=userService.alreadyNickRegisterCheck(userVO,alreadyNickRegister);
+        alreadyNickRegister=userService.alreadyNickRegisterCheck(userVO.getNickname(),alreadyNickRegister);
         return alreadyNickRegister;
     }
     @PostMapping(value = "/insert")
@@ -54,18 +59,18 @@ public class UserController {
     }
 
 
-    @DeleteMapping(value = "/delete")
-    public void deleteUser(UserVO userVO){
-        userService.deleteUser(userVO);
+    @DeleteMapping(value = "/delete/{param}")
+    public void deleteUser(@PathVariable String param){
+        userService.deleteUser(param);
     }
 
     @PostMapping(value = "/send_num_to_email")
-    public String sendAuthNumToEmail(@RequestParam String email){
+    public String sendAuthNumToEmail(@RequestBody String email){
         return mailSendService.sendAuthNumToEmail(email);
     }
 
     @PostMapping(value = "/find_password")
-    public void sendPasswordToEmail(@RequestParam String email){
+    public void sendPasswordToEmail(@RequestBody String email){
         mailSendService.sendPasswordToEmail(email);
     }
 

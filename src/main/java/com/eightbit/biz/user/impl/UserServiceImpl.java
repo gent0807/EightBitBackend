@@ -14,12 +14,14 @@ public class UserServiceImpl implements UserService {
     @Qualifier("userSpingDAO")
     private UserSpringDAO userSpingDAO;
 
-    public String alreadyEmailRegisterCheck(UserVO userVO,String alreadyEmailRegister){
-        alreadyEmailRegister=userSpingDAO.alreadyEmailRegisterCheck(userVO,alreadyEmailRegister);
+    public String alreadyEmailRegisterCheck(String email,String alreadyEmailRegister){
+        System.out.println(email);
+        alreadyEmailRegister=userSpingDAO.alreadyEmailRegisterCheck(email,alreadyEmailRegister);
         return alreadyEmailRegister;
     }
-    public String alreadyNickRegisterCheck(UserVO userVO,String alreadyNickRegister){
-        alreadyNickRegister=userSpingDAO.alreadyNickRegisterCheck(userVO,alreadyNickRegister);
+    public String alreadyNickRegisterCheck(String nickname,String alreadyNickRegister){
+        System.out.println(nickname);
+        alreadyNickRegister=userSpingDAO.alreadyNickRegisterCheck(nickname,alreadyNickRegister);
         return alreadyNickRegister;
     }
     public void insertUser(UserVO userVO){
@@ -36,8 +38,8 @@ public class UserServiceImpl implements UserService {
         userSpingDAO.updateUser(userVO);
     }
 
-    public void deleteUser(UserVO userVO){
-        userSpingDAO.deleteUser(userVO);
+    public void deleteUser(String param){
+        userSpingDAO.deleteUser(param);
     }
 
 

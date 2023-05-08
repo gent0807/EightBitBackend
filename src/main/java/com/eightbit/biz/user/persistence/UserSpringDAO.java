@@ -18,9 +18,9 @@ public class UserSpringDAO {
     private final String USER_GET = "select * from user where email=?";
     private final String USER_LIST = "select * from user";
 
-    public String alreadyEmailRegisterCheck(UserVO userVO, String alreadyEmailRegister){
+    public String alreadyEmailRegisterCheck(String email, String alreadyEmailRegister){
         List<UserVO> userVOList=jdbcTemplate.query(USER_LIST,new UserRowMaper());
-        String email= userVO.getEmail();
+        System.out.println(userVOList);
         for(UserVO user:userVOList){
             if(user.getEmail().equals(email)){
                 alreadyEmailRegister="yes";
@@ -29,9 +29,9 @@ public class UserSpringDAO {
         }
         return alreadyEmailRegister;
     }
-    public String alreadyNickRegisterCheck(UserVO userVO, String alreadyNickRegister){
+    public String alreadyNickRegisterCheck(String nickname, String alreadyNickRegister){
         List<UserVO> userVOList=jdbcTemplate.query(USER_LIST,new UserRowMaper());
-        String nickname=userVO.getNickname();
+        System.out.println(userVOList);
         for(UserVO user:userVOList){
             if(user.getNickname().equals(nickname)){
                 alreadyNickRegister="yes";
@@ -68,7 +68,7 @@ public class UserSpringDAO {
         jdbcTemplate.update(USER_UPDATE, userVO.getPassword(), userVO.getNickname(),userVO.getEmail());
     }
 
-    public void deleteUser(UserVO userVO){
-        jdbcTemplate.update(USER_DELETE, userVO.getEmail());
+    public void deleteUser(String param){
+        jdbcTemplate.update(USER_DELETE, param);
     }
 }
