@@ -24,8 +24,8 @@ public class UserController {
     @Qualifier("mailSendService")
     private MailSendService mailSendService;
 
-    @GetMapping(value = "/alreadyEmailRegisterCheck",produces="text/plain; charset=UTF-8")
-    public String alreadyEmailRegisterCheck(UserVO userVO){
+    @PostMapping(value = "/alreadyEmailRegisterCheck")
+    public String alreadyEmailRegisterCheck(@RequestBody UserVO userVO){
         System.out.println("이메일 존재 확인 요청 접수");
         System.out.println(userVO);
         String alreadyEmailRegister="no";
@@ -33,8 +33,8 @@ public class UserController {
         return alreadyEmailRegister;
     }
 
-    @GetMapping(value = "/alreadyNickRegisterCheck",produces ="text/plain; charset=UTF-8")
-    public String alreadyNickRegisterCheck(UserVO userVO){
+    @PostMapping(value = "/alreadyNickRegisterCheck")
+    public String alreadyNickRegisterCheck(@RequestBody UserVO userVO){
         System.out.println("닉네임 존재 확인 요청 접수");
         System.out.println(userVO);
         String alreadyNickRegister="no";
@@ -46,8 +46,9 @@ public class UserController {
         userService.insertUser(userVO);
     }
 
-    @GetMapping(value = "/loginCheck", produces ="text/plain; charset=UTF-8")
-    public String loginCheck(UserVO userVO){
+    @PostMapping(value = "/loginCheck")
+    public String loginCheck(@RequestBody UserVO userVO){
+        System.out.println("로그인 시도 요청 접수");
         String loginPossible="no";
         loginPossible=userService.loginCheck(userVO,loginPossible);
         return loginPossible;
