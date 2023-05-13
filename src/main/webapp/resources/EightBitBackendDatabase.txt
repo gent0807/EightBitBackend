@@ -25,3 +25,15 @@ CREATE TABLE `board`(
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 set sql_safe_updates = 0;
+
+insert into user(email,password,nickname) values ('khs641010@ver.com','lantoboy12@', 'ㅇ');
+insert into board(title, content, regdate, updatedate) values('환영합니다. 8비트입니다', '안녕하세요. 8비트입니다', now(),now());
+insert into board(title, content, writer, regdate, updatedate) values('안내드립니다.', '안내드립니다.', '운영자', now(),now());
+
+select * from user;
+select * from board;
+
+ALTER TABLE board MODIFY seq INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE board AUTO_INCREMENT=1;
+
+update board set writer='운영자' where seq=1;
