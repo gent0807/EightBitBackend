@@ -10,7 +10,7 @@ CREATE TABLE `user`(
   UNIQUE INDEX (`nickname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `board`( 
+CREATE TABLE `board`(
   `seq` int(5) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) DEFAULT NULL,
   `writer` varchar(30) DEFAULT NULL,
@@ -19,12 +19,10 @@ CREATE TABLE `board`(
   `updatedate`  date NOT NULL,
   `visitcnt` int(5) DEFAULT '0',
   `ofile` varchar(100),
-  `sfile` varchar(100), 
+  `sfile` varchar(100),
   foreign key(`writer`) REFERENCES user(nickname) ON UPDATE cascade ON DELETE cascade,
   PRIMARY KEY (`seq`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-set sql_safe_updates = 0;
 
 insert into user(email,password,nickname) values ('theloopholesnk@gmail.com','dbstjqdl7*!', '운영자');
 insert into board(title, content, writer, regdate, updatedate) values('환영합니다. 8비트입니다', '안녕하세요. 8비트입니다','운영자', now(),now());
