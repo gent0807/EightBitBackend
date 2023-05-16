@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("userSpingDAO")
+@Repository("userSpringDAO")
 public class UserSpringDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
