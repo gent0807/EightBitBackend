@@ -1,0 +1,41 @@
+CREATE DATABASE eightbitdb;
+
+USE `eightbitdb`;
+
+CREATE TABLE `user`(
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `nickname` varchar(50) NOT NULL,
+  PRIMARY KEY (`email`),
+  UNIQUE INDEX (`nickname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `board`(
+  `seq` int(5) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) DEFAULT NULL,
+  `writer` varchar(30) DEFAULT NULL,
+  `content` varchar(2000) DEFAULT NULL,
+  `regdate`  date NOT NULL,
+  `updatedate`  date NOT NULL,
+  `visitcnt` int(5) DEFAULT '0',
+  `ofile` varchar(100),
+  `sfile` varchar(100),
+  foreign key(`writer`) REFERENCES user(nickname) ON UPDATE cascade ON DELETE cascade,
+  PRIMARY KEY (`seq`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert into user(email,password,nickname) values ('theloopholesnk@gmail.com','dbstjqdl7*!', '운영자');
+insert into board(title, content, writer, regdate, updatedate) values('환영합니다. 8비트입니다', '안녕하세요. 8비트입니다','운영자', now(),now());
+insert into board(title, content, writer, regdate, updatedate) values('안내드립니다.', '안내드립니다.', '운영자', now(),now());
+
+select * from user;
+select * from board;
+
+ALTER TABLE board MODIFY seq INT NOT NULL AUTO_INCREMENT;
+ALTER TABLE board AUTO_INCREMENT=1;
+
+delete from board where writer='운영자';
+
+DROP table board;
+
+update board set writer='운영자' where seq=1;
