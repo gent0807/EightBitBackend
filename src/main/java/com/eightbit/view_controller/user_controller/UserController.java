@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.awt.*;
 
 @CrossOrigin(origins = "*")
@@ -49,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/loginCheck")
-    public String loginCheck(@RequestBody UserVO userVO){
+    public String loginCheck(@RequestBody UserVO userVO, HttpSession session){
         System.out.println("로그인 시도 요청 접수");
         System.out.println(userVO);
         String loginPossible="no";
