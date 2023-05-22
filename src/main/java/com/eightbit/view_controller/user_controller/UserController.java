@@ -51,17 +51,11 @@ public class UserController {
     }
 
     @PostMapping(value = "/loginCheck")
-    public String loginCheck(@RequestBody UserVO userVO, HttpSession session){
+    public String loginCheck(@RequestBody UserVO userVO){
         System.out.println("로그인 시도 요청 접수");
         System.out.println(userVO);
         String loginPossible="no";
         loginPossible=userService.loginCheck(userVO,loginPossible);
-        if(loginPossible.equals("yes")){
-            session.setAttribute("sessionEmail",userVO.getEmail());
-        }
-        else{
-            session.setAttribute("sessionEmail",null);
-        }
         return loginPossible;
     }
 
