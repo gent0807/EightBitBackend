@@ -76,11 +76,18 @@ public class UserController {
         userService.deleteUser(param);
     }
 
+<<<<<<< HEAD
     @PostMapping(value = "/send_num_to_email")
     public String sendAuthNumToEmail(@RequestBody String email){
         System.out.println("이메일 인증번호 전송 요청 접수");
         System.out.println("인증요청 메일: "+email);
         return mailSendService.joinEmail(email);
+=======
+    @PostMapping(value = "/send_auth_key_to_email")
+    public String sendAuthNumToEmail(@RequestBody UserVO userVO){
+         String authkey=mailSendService.mailSend(userVO.getEmail());
+         return authkey;
+>>>>>>> test2
     }
 
 
