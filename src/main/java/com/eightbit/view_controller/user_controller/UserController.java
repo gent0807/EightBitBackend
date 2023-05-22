@@ -6,6 +6,7 @@ import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -50,12 +51,17 @@ public class UserController {
         userService.insertUser(userVO);
     }
 
+
     @PostMapping(value = "/loginCheck")
     public String loginCheck(@RequestBody UserVO userVO){
         System.out.println("로그인 시도 요청 접수");
         System.out.println(userVO);
+        //HttpHeaders headers=new HttpHeaders();
+        //headers.add("Access-Control-Allow-Origin", "*");
         String loginPossible="no";
         loginPossible=userService.loginCheck(userVO,loginPossible);
+
+        //ResponseEntity<String> responseEntity=new ResponseEntity<>(loginPossible,headers, HttpStatus.OK);
         return loginPossible;
     }
 
