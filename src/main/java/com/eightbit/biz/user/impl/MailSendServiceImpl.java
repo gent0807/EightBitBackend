@@ -57,7 +57,6 @@ public class MailSendServiceImpl implements MailSendService {
             System.out.println("타겟 주소 삽입");
             helper.setSubject(title);
             System.out.println("제목 삽입");
-            // true 전달 > html 형식으로 전송 , 작성하지 않으면 단순 텍스트로 전달.
             helper.setText(content,true);
             System.out.println("내용 삽입");
             mailSender.send(message);
@@ -71,60 +70,5 @@ public class MailSendServiceImpl implements MailSendService {
         }
     }
 
-    /*@Autowired
-    @Qualifier("gmailAuth")
-    public Authenticator auth;
-    public String sendAuthKey(String email){
-        String host="http://localhost:8033/EightBitBackend/";
-        String from="theloopholesnk@gmail.com";
-        String to= email;
-        String subject="회원가입을 위한 이메일 인증 메일입니다.";
-        String content=null;
 
-        Random random=new Random();
-        int checkNum=random.nextInt(888888)+111111;
-        content =
-                "안녀하세요. 8비트입니다. 방문해주셔서 감사합니다." + 	//html 형식으로 작성 !
-                        "<br><br>" +
-                        "요청하신 인증 번호는 " + checkNum + "입니다." +
-                        "<br>" +
-                        "해당 인증번호를 인증번호 확인란에 기입하여 주세요.";
-
-
-        Properties p= new Properties();
-        p.put("mail.smtp.user", from);
-        p.put("mail.smtp.host", "smtp.gmail.com");
-        p.put("mail.smtp.port","587");
-        p.put("mail.smtp.starttls.enable", true);
-        p.put("mail.smtp.auth", "true");
-        p.put("mail.smtp.debug", "true");
-        p.put("mail.smtp.socketFactory.port", "587");
-        p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        p.put("mail.smtp.socketFactory.fallback", "false");
-
-        try{
-            Session ses=Session.getInstance(p,auth);
-            ses.setDebug(true);
-            MimeMessage msg=new MimeMessage(ses);
-            System.out.println("메시기 객체 만듬");
-            msg.setSubject(subject);
-            System.out.println("제목 삽입");
-            InternetAddress fromAddr=new InternetAddress(from);
-            msg.setFrom(fromAddr);
-            System.out.println("시작 주소 삽입");
-            InternetAddress toAddr=new InternetAddress(email);
-            System.out.println("타겟 주소 객체 생성");
-            msg.addRecipient(Message.RecipientType.TO, toAddr);
-            System.out.println("타겟 주소 삽입");
-            msg.setContent(content, "text/html;charset=UTF8");
-            System.out.println("내용 삽입");
-            Transport.send(msg);
-            System.out.println("이메일 전송?");
-        }catch(Exception e){
-            System.out.println("이메일 전송 실패");
-            e.printStackTrace();
-        }
-
-        return Integer.toString(checkNum);
-    }*/
 }
