@@ -227,30 +227,21 @@
       <version>1.3.3</version>
     </dependency>
 
+
     <dependency>
-<<<<<<< HEAD
-      <groupId>com.sun.mail</groupId>
-      <artifactId>javax.mail</artifactId>
-      <version>1.6.2</version>
-    </dependency>
-    <dependency>
-=======
->>>>>>> test2
+
       <groupId>javax.mail</groupId>
       <artifactId>mail</artifactId>
       <version>1.4.7</version>
     </dependency>
 
-<<<<<<< HEAD
-=======
 
->>>>>>> test2
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
       <version>${org.springframework-version}</version>
     </dependency>
-<<<<<<< HEAD
+
 
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
