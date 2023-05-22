@@ -3,15 +3,11 @@ package com.eightbit.biz.user.impl;
 import com.eightbit.biz.user.inter.MailSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-<<<<<<< HEAD
-=======
-import org.springframework.mail.javamail.JavaMailSender;
->>>>>>> test2
+
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Random;
@@ -26,67 +22,11 @@ public class MailSendServiceImpl implements MailSendService{
 
     public void makeRandomNumber() {
         // 난수의 범위 111111 ~ 999999 (6자리 난수)
-=======
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.PrintWriter;
-import java.util.Properties;
-import java.util.Random;
-
-@Service("mailSendService")
-public class MailSendServiceImpl implements MailSendService {
-    @Autowired
-    @Qualifier("mailSender")
-    private JavaMailSenderImpl mailSender;
-
-    private int authNumber;
-
-
-    public void makeRandomNumber() {
-
->>>>>>> test2
         Random r = new Random();
         int checkNum = r.nextInt(888888) + 111111;
         System.out.println("인증번호 : " + checkNum);
         authNumber = checkNum;
     }
-
-<<<<<<< HEAD
-    public String joinEmail(String email) {
-        makeRandomNumber();
-        String setFrom = "theloopholesnk@gmail.com"; // email-config에 설정한 자신의 이메일 주소를 입력
-        String toMail = email;
-        String title = "회원 가입 인증 이메일 입니다."; // 이메일 제목
-        String content =
-                "안녕하세요 8비트입니다!" + 	//html 형식으로 작성 !
-                        "<br><br>" +
-                        "회원님이 요청하신 인증 번호는 " + authNumber + "입니다." +
-                        "<br>" +
-                        "해당 인증번호를 인증번호 확인란에 기입하여 주세요."; //이메일 내용 삽입
-        sendAuthNumToEmail(setFrom, toMail, title, content);
-        return Integer.toString(authNumber);
-    }
-
-    public void sendAuthNumToEmail(String setFrom, String toMail, String title,String content){
-        MimeMessage message = mailSender.createMimeMessage();
-        // true 매개값을 전달하면 multipart 형식의 메세지 전달이 가능.문자 인코딩 설정도 가능하다.
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message,true,"utf-8");
-            helper.setFrom(setFrom);
-            helper.setTo(toMail);
-            helper.setSubject(title);
-            // true 전달 > html 형식으로 전송 , 작성하지 않으면 단순 텍스트로 전달.
-            helper.setText(content,true);
-            mailSender.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
-
-=======
-
-
     //이메일 전송 메소드
     public String mailSend(String email)  {
         makeRandomNumber();
@@ -123,6 +63,5 @@ public class MailSendServiceImpl implements MailSendService {
         }
     }
 
->>>>>>> test2
 
 }
