@@ -60,7 +60,6 @@ public class UserController {
         //headers.add("Access-Control-Allow-Origin", "*");
         String loginPossible="no";
         loginPossible=userService.loginCheck(userVO,loginPossible);
-
         //ResponseEntity<String> responseEntity=new ResponseEntity<>(loginPossible,headers, HttpStatus.OK);
         return loginPossible;
     }
