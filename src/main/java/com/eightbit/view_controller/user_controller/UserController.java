@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/loginCheck")
-    public String loginCheck(@RequestBody UserVO userVO, HttpSession session){
+    public String loginCheck(@RequestBody UserVO userVO){
         System.out.println("로그인 시도 요청 접수");
         System.out.println(userVO);
         String loginPossible="no";
