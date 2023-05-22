@@ -46,6 +46,7 @@ public class UserController {
     }
     @PostMapping(value = "/insert")
     public void insertUser(@RequestBody UserVO userVO){
+        System.out.println(userVO);
         userService.insertUser(userVO);
     }
 
@@ -55,6 +56,12 @@ public class UserController {
         System.out.println(userVO);
         String loginPossible="no";
         loginPossible=userService.loginCheck(userVO,loginPossible);
+        if(loginPossible.equals("yes")){
+            session.setAttribute("sessionEmail",userVO.getEmail());
+        }
+        else{
+            session.setAttribute("sessionEmail",null);
+        }
         return loginPossible;
     }
 
@@ -71,13 +78,12 @@ public class UserController {
 
     @PostMapping(value = "/send_num_to_email")
     public String sendAuthNumToEmail(@RequestBody String email){
-        return mailSendService.sendAuthNumToEmail(email);
+        System.out.println("이메일 인증번호 전송 요청 접수");
+        System.out.println("인증요청 메일: "+email);
+        return mailSendService.joinEmail(email);
     }
 
-    @PostMapping(value = "/find_password")
-    public void sendPasswordToEmail(@RequestBody String email){
-        mailSendService.sendPasswordToEmail(email);
-    }
+
 
 
 
