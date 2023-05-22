@@ -69,15 +69,13 @@ public class UserController {
         userService.deleteUser(param);
     }
 
-    @PostMapping(value = "/send_num_to_email")
-    public String sendAuthNumToEmail(@RequestBody String email){
-        return mailSendService.sendAuthNumToEmail(email);
+    @PostMapping(value = "/send_auth_key_to_email")
+    public String sendAuthNumToEmail(@RequestBody UserVO userVO){
+         String authkey=mailSendService.mailSend(userVO.getEmail());
+         return authkey;
     }
 
-    @PostMapping(value = "/find_password")
-    public void sendPasswordToEmail(@RequestBody String email){
-        mailSendService.sendPasswordToEmail(email);
-    }
+
 
 
 

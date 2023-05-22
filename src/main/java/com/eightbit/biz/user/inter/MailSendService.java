@@ -1,6 +1,16 @@
 package com.eightbit.biz.user.inter;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+
+import javax.mail.MessagingException;
+
 public interface MailSendService {
-    public String sendAuthNumToEmail(String email);
-    public void sendPasswordToEmail(String email);
+    //public String sendAuthKey(String email);
+    public void makeRandomNumber();
+
+
+
+    public String mailSend(String email);
+
 }
