@@ -260,8 +260,7 @@
       <scope>runtime</scope>
     </dependency>
 
-=======
->>>>>>> test2
+
   </dependencies>
   <build>
     <finalName>EightBitBackend</finalName>
