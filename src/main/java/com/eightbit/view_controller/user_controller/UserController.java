@@ -32,18 +32,14 @@ public class UserController {
     public String alreadyEmailRegisterCheck(@RequestBody UserVO userVO){
         System.out.println("이메일 존재 확인 요청 접수");
         System.out.println(userVO);
-        String alreadyEmailRegister="no";
-        alreadyEmailRegister=userService.alreadyEmailRegisterCheck(userVO.getEmail(),alreadyEmailRegister);
-        return alreadyEmailRegister;
+        return userService.alreadyEmailRegisterCheck(userVO.getEmail());
     }
 
     @PostMapping(value = "/alreadyNickRegisterCheck")
     public String alreadyNickRegisterCheck(@RequestBody UserVO userVO){
         System.out.println("닉네임 존재 확인 요청 접수");
         System.out.println(userVO);
-        String alreadyNickRegister="no";
-        alreadyNickRegister=userService.alreadyNickRegisterCheck(userVO.getNickname(),alreadyNickRegister);
-        return alreadyNickRegister;
+        return userService.alreadyNickRegisterCheck(userVO.getNickname());
     }
     @PostMapping(value = "/insert")
     public void insertUser(@RequestBody UserVO userVO){
@@ -56,17 +52,19 @@ public class UserController {
     public String loginCheck(@RequestBody UserVO userVO){
         System.out.println("로그인 시도 요청 접수");
         System.out.println(userVO);
-        //HttpHeaders headers=new HttpHeaders();
-        //headers.add("Access-Control-Allow-Origin", "*");
-        String loginPossible="no";
-        loginPossible=userService.loginCheck(userVO,loginPossible);
-        //ResponseEntity<String> responseEntity=new ResponseEntity<>(loginPossible,headers, HttpStatus.OK);
-        return loginPossible;
+        return userService.loginCheck(userVO);
     }
 
-    @PutMapping(value = "/update")
-    public void updateUser(@RequestBody UserVO userVO){
-        userService.updateUser(userVO);
+    @PostMapping(value = "/alreadyPasswordUsingCheck")
+    public String alreadyPasswordUsingCheck(@RequestBody UserVO userVO){
+        System.out.println("패스워드 중복 검사 요청 접수");
+        System.out.println(userVO);
+        return userService.alreadyPasswordUsingCheck(userVO);
+    }
+
+    @PutMapping(value = "/updateUserPw")
+    public void updateUserPw(@RequestBody UserVO userVO){
+        userService.updateUserPw(userVO);
     }
 
 
