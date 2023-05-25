@@ -4,11 +4,12 @@ import com.eightbit.biz.user.vo.UserVO;
 
     public interface UserService {
 
-        public String alreadyEmailRegisterCheck(String email, String alreadyEmailRegister);
-        public String alreadyNickRegisterCheck(String nickname, String alreadyNickRegister);
+        public String alreadyEmailRegisterCheck(String email);
+        public String alreadyNickRegisterCheck(String nickname);
         public void insertUser(UserVO userVO);
-        public String loginCheck(UserVO userVO,String loginPossible);
-        public void updateUser(UserVO userVO);
+        public String loginCheck(UserVO userVO);
+        public String alreadyPasswordUsingCheck(UserVO userVO);
+        public void updateUserPw(UserVO userVO);
         public void deleteUser(String param);
 
 

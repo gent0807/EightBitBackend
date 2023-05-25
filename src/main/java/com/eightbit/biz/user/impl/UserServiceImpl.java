@@ -14,28 +14,29 @@ public class UserServiceImpl implements UserService {
     @Qualifier("userSpringDAO")
     private UserSpringDAO userSpringDAO;
 
-    public String alreadyEmailRegisterCheck(String email,String alreadyEmailRegister){
+    public String alreadyEmailRegisterCheck(String email){
         System.out.println(email);
-        alreadyEmailRegister= userSpringDAO.alreadyEmailRegisterCheck(email,alreadyEmailRegister);
-        return alreadyEmailRegister;
+        return userSpringDAO.alreadyEmailRegisterCheck(email);
     }
-    public String alreadyNickRegisterCheck(String nickname,String alreadyNickRegister){
+    public String alreadyNickRegisterCheck(String nickname){
         System.out.println(nickname);
-        alreadyNickRegister= userSpringDAO.alreadyNickRegisterCheck(nickname,alreadyNickRegister);
-        return alreadyNickRegister;
+        return userSpringDAO.alreadyNickRegisterCheck(nickname);
     }
     public void insertUser(UserVO userVO){
 
         userSpringDAO.insertUser(userVO);
 
     }
-    public String loginCheck(UserVO userVO,String loginPossible){
-            loginPossible= userSpringDAO.loginCheck(userVO,loginPossible);
-            return loginPossible;
+    public String loginCheck(UserVO userVO){
+            return userSpringDAO.loginCheck(userVO);
     }
 
-    public void updateUser(UserVO userVO){
-        userSpringDAO.updateUser(userVO);
+    public String alreadyPasswordUsingCheck(UserVO userVO){
+            return userSpringDAO.alreadyPasswordUsingCheck(userVO);
+    }
+
+    public void updateUserPw(UserVO userVO){
+        userSpringDAO.updateUserPw(userVO);
     }
 
     public void deleteUser(String param){

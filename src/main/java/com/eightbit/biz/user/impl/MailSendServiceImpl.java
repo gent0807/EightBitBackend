@@ -3,9 +3,11 @@ package com.eightbit.biz.user.impl;
 import com.eightbit.biz.user.inter.MailSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Random;
@@ -60,7 +62,6 @@ public class MailSendServiceImpl implements MailSendService{
             return errormsg;
         }
     }
-
 
 
 }
