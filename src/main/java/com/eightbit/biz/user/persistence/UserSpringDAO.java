@@ -3,6 +3,7 @@ package com.eightbit.biz.user.persistence;
 import com.eightbit.biz.board.vo.BoardVO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -10,7 +11,9 @@ import java.util.List;
 
 @Repository("userSpringDAO")
 public class UserSpringDAO {
+
     @Autowired
+    @Qualifier("jdbcTemplate")
     private JdbcTemplate jdbcTemplate;
     private final String USER_INSERT = "insert into user(email, password, nickname) values(?, ?, ?)";
     private final String USER_PW_UPDATE = "update user set password=? where email=?";
