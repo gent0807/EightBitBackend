@@ -284,6 +284,7 @@
         <version>3.3.2</version>
         <configuration>
           <resourceEncoding>UTF-8</resourceEncoding>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
         </configuration>
       </plugin>
     </plugins>
