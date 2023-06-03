@@ -1,6 +1,7 @@
 package com.eightbit.biz.user.impl;
 
 import com.eightbit.biz.user.inter.UserService;
+import com.eightbit.biz.user.persistence.UserMyBatisDAO;
 import com.eightbit.biz.user.persistence.UserSpringDAO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,33 +15,37 @@ public class UserServiceImpl implements UserService {
     @Qualifier("userSpringDAO")
     private UserSpringDAO userSpringDAO;
 
+    @Autowired
+    @Qualifier("userMyBatisDAO")
+    private UserMyBatisDAO userMyBatisDAO;
+
     public String alreadyEmailRegisterCheck(String email){
         System.out.println(email);
-        return userSpringDAO.alreadyEmailRegisterCheck(email);
+        return userMyBatisDAO.alreadyEmailRegisterCheck(email);
     }
     public String alreadyNickRegisterCheck(String nickname){
         System.out.println(nickname);
-        return userSpringDAO.alreadyNickRegisterCheck(nickname);
+        return userMyBatisDAO.alreadyNickRegisterCheck(nickname);
     }
     public void insertUser(UserVO userVO){
 
-        userSpringDAO.insertUser(userVO);
+        userMyBatisDAO.insertUser(userVO);
 
     }
     public String loginCheck(UserVO userVO){
-            return userSpringDAO.loginCheck(userVO);
+            return userMyBatisDAO.loginCheck(userVO);
     }
 
     public String alreadyPasswordUsingCheck(UserVO userVO){
-            return userSpringDAO.alreadyPasswordUsingCheck(userVO);
+            return userMyBatisDAO.alreadyPasswordUsingCheck(userVO);
     }
 
     public void updateUserPw(UserVO userVO){
-        userSpringDAO.updateUserPw(userVO);
+        userMyBatisDAO.updateUserPw(userVO);
     }
 
     public void deleteUser(String param){
-        userSpringDAO.deleteUser(param);
+        userMyBatisDAO.deleteUser(param);
     }
 
 
