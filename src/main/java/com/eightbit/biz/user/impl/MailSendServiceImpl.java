@@ -1,9 +1,12 @@
 package com.eightbit.biz.user.impl;
 
 import com.eightbit.biz.user.inter.MailSendService;
+import com.eightbit.biz.user.persistence.UserMyBatisDAO;
+import com.eightbit.biz.user.vo.TempVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -13,12 +16,19 @@ import javax.mail.internet.MimeMessage;
 import java.util.Random;
 
 @Service("mailSendService")
+@PropertySource("classpath:auth.properties")
 public class MailSendServiceImpl implements MailSendService{
 
     @Autowired
     @Qualifier("mailSender")
     private JavaMailSenderImpl mailSender;
+
+    @Autowired
+    @Qualifier("userMyBatisDAO")
+    private UserMyBatisDAO userMyBatisDAO;
+
     private int authNumber;
+
 
     public void makeRandomNumber() {
         // 난수의 범위 111111 ~ 999999 (6자리 난수)
@@ -29,6 +39,7 @@ public class MailSendServiceImpl implements MailSendService{
     }
     //이메일 전송 메소드
     public String mailSend(String email)  {
+        TempVO tempVO =new TempVO();
         makeRandomNumber();
         String setFrom = "theloopholesnk@gmail.com";
         String toMail = email;
@@ -53,8 +64,14 @@ public class MailSendServiceImpl implements MailSendService{
             helper.setText(content,true);
             System.out.println("내용 삽입");
             mailSender.send(message);
-            System.out.println("이메일 전송 성공");
-            return Integer.toString(authNumber);
+            tempVO.setEmail(email);
+            tempVO.setAuthNum(authNumber);
+            if(userMyBatisDAO.alreadyEmailTempCheck(email).equals("yes")){
+                return userMyBatisDAO.updateTempAuthNum(tempVO);
+            }
+            else{
+                return userMyBatisDAO.insertTempUser(tempVO);
+            }
         } catch (MessagingException e) {
             System.out.println("이메일 전송 실패");
             String errormsg="인증번호 전송에 실패했습니다";

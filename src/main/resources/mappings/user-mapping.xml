@@ -8,18 +8,40 @@
         select * from user
     </select>
 
+    <select id="getTempList" resultType="temp">
+        select* from auth_temp
+    </select>
+
+    <select id="getAuthNum">
+        select auth_key from auth_temp where email=#{email}
+    </select>
+
+    <select id="getRole">
+        select role from user where nickname=#{userName}
+    </select>
+
     <insert id="insertUser">
-        insert into user(email, password, nickname) values(#{email}, #{password}, #{nickname});
+        insert into user(email, password, nickname, role) values(#{email}, #{password}, #{nickname}, #{role})
+    </insert>
+
+    <insert id="insertTempUser">
+        insert into auth_temp(email, auth_key) values(#{email}, #{authNum})
     </insert>
 
     <update id="updateUserPw">
         update user set password=#{password} where email=#{email}
     </update>
 
+    <update id="updateTempAuthNum">
+        update auth_temp set auth_key=#{authNum} where email=#{email}
+    </update>
+
     <delete id="deleteUser">
         delete from user where email=#{email}
     </delete>
 
-
+    <delete id="deleteTempRow">
+        delete from auth_temp where email=#{email}
+    </delete>
 
 </mapper>

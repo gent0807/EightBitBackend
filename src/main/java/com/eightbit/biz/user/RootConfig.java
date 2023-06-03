@@ -52,13 +52,13 @@ public class RootConfig {
         return new DataSourceTransactionManager(dataSource());
     }
 
-    /*
+
 
     @Bean
     public DataSource hikariDataSource(){
         HikariConfig hikariConfig=new HikariConfig();
         hikariConfig.setDriverClassName(env.getProperty("jdbc.driver"));
-        hikariConfig.setJdbcUrl(env.getProperty("jdbc.uel"));
+        hikariConfig.setJdbcUrl(env.getProperty("jdbc.url"));
         hikariConfig.setUsername(env.getProperty("jdbc.username"));
         hikariConfig.setPassword(env.getProperty("jdbc.password"));
 
@@ -66,12 +66,12 @@ public class RootConfig {
         return  dataSource;
     }
 
-     */
+
 
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception{
         SqlSessionFactoryBean sqlSessionFactory= new SqlSessionFactoryBean();
-        sqlSessionFactory.setDataSource(dataSource());
+        sqlSessionFactory.setDataSource(hikariDataSource());
         sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
         sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mappings/*.xml"));
         return (SqlSessionFactory) sqlSessionFactory.getObject();

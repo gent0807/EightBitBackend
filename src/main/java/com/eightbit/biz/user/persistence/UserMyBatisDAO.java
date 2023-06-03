@@ -1,18 +1,33 @@
 package com.eightbit.biz.user.persistence;
 
+import com.eightbit.biz.user.util.JWTUtil;
+import com.eightbit.biz.user.vo.TempVO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository("userMyBatisDAO")
+@PropertySource("classpath:auth.properties")
 public class UserMyBatisDAO {
     @Autowired
     @Qualifier("sqlSessionTemplate")
     private SqlSessionTemplate mybatis;
+
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private Long expiredMs= 1000*60*60l;
+
+    @Value("${jwt.temp1}")
+    private String temp1;
+
+    @Value("${jwt.temp2}")
+    private String temp2;
 
     public String alreadyEmailRegisterCheck(String email){
         String alreadyEmailRegister="no";
@@ -26,6 +41,20 @@ public class UserMyBatisDAO {
         }
         return alreadyEmailRegister;
     }
+
+    public String alreadyEmailTempCheck(String email){
+        String alreadyEmailRegister="no";
+        List<TempVO> tempVOList=mybatis.selectList("UserMyBatisDAO.getTempList");
+        System.out.println(tempVOList);
+        for(TempVO temp:tempVOList){
+            if(temp.getEmail().equals(email)){
+                alreadyEmailRegister="yes";
+                break;
+            }
+        }
+        return alreadyEmailRegister;
+    }
+
     public String alreadyNickRegisterCheck(String nickname){
         String alreadyNickRegister="no";
         List<UserVO> userVOList=mybatis.selectList("UserMyBatisDAO.getUserList");
@@ -38,20 +67,22 @@ public class UserMyBatisDAO {
         }
         return alreadyNickRegister;
     }
-    public void insertUser(UserVO userVO) {
+    public String insertUser(UserVO userVO) {
+        mybatis.delete("UserMyBatisDAO.deleteTempRow", userVO.getEmail());
         mybatis.insert("UserMyBatisDAO.insertUser", userVO);
+        return "";
     }
 
     public String loginCheck(UserVO userVO){
-        String loginPossible="no";
+        String result="no";
         List<UserVO> userVOList=mybatis.selectList("UserMyBatisDAO.getUserList");
         String email=userVO.getEmail();
         String password=userVO.getPassword();
         for(UserVO user:userVOList){
             if(user.getEmail().equals(email)){
-                loginPossible="emailok";
+                result="emailok";
                 if(user.getPassword().equals(password)){
-                    loginPossible="allok";
+                    result=JWTUtil.createJWT(userVO.getNickname(), secretKey, expiredMs); //JWTUtil 클래스의 static 메소드
                     break;
                 }
                 else{
@@ -59,7 +90,7 @@ public class UserMyBatisDAO {
                 }
             }
         }
-        return loginPossible;
+        return result;
     }
 
     public String alreadyPasswordUsingCheck(UserVO userVO){
@@ -78,7 +109,30 @@ public class UserMyBatisDAO {
         mybatis.update("UserMyBatisDAO.updateUserPw", userVO);
     }
 
-    public void deleteUser(String param){
-        mybatis.delete("UserMyBatisDAO.deleteUser", param);
+    public String updateTempAuthNum(TempVO tempVO){
+        mybatis.update("UserMyBatisDAO.updateTempAuthNum",tempVO);
+        return JWTUtil.createJWT(temp1,secretKey,expiredMs);
+    }
+    public void deleteUser(String email){
+        mybatis.delete("UserMyBatisDAO.deleteUser", email);
+    }
+
+    public String findRoleFromNick(String userName){
+        return mybatis.selectOne("UserMyBatisDAO.getRole", userName);
+    }
+
+    public String insertTempUser(TempVO tempVO){
+        mybatis.insert("UserMyBatisDAO.insertTempUser", tempVO);
+        return JWTUtil.createJWT(temp1, secretKey, expiredMs);
+    }
+
+    public String checkRightAuthNum(TempVO tempVO){
+        int auth=mybatis.selectOne("UserMyBatisDAO.getAuthNum", tempVO.getEmail());
+        if(auth==tempVO.getAuthNum()){
+            return JWTUtil.createJWT(temp2, secretKey, expiredMs);
+        }
+        else{
+            return "no";
+        }
     }
 }
