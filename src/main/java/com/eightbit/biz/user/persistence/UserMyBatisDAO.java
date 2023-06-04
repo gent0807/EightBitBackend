@@ -128,6 +128,8 @@ public class UserMyBatisDAO {
 
     public String checkRightAuthNum(TempVO tempVO){
         int auth=mybatis.selectOne("UserMyBatisDAO.getAuthNum", tempVO.getEmail());
+        System.out.println("디비에 저장된 인증키"+auth);
+        System.out.println("클라이언트가 보낸 숫자"+tempVO.getAuthNum());
         if(auth==tempVO.getAuthNum()){
             return JWTUtil.createJWT(temp2, secretKey, expiredMs);
         }
