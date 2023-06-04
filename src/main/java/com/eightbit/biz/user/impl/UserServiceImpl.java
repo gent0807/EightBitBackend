@@ -8,6 +8,7 @@ import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service("userService")
@@ -21,6 +22,10 @@ public class UserServiceImpl implements UserService {
     @Qualifier("userMyBatisDAO")
     private UserMyBatisDAO userMyBatisDAO;
 
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
     public String alreadyEmailRegisterCheck(String email){
         System.out.println(email);
         return userMyBatisDAO.alreadyEmailRegisterCheck(email);
@@ -30,7 +35,7 @@ public class UserServiceImpl implements UserService {
         return userMyBatisDAO.alreadyNickRegisterCheck(nickname);
     }
     public String insertUser(UserVO userVO){
-
+        userVO.setPassword(encoder.encode(userVO.getPassword()));
         return userMyBatisDAO.insertUser(userVO);
 
     }
@@ -55,6 +60,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public String checkRightAuthNum(TempVO tempVO){
+        tempVO.setEmail(encoder.encode(tempVO.getEmail()));
+        tempVO.setAuthNum(encoder.encode(tempVO.getAuthNum()));
         return userMyBatisDAO.checkRightAuthNum(tempVO);
     }
 

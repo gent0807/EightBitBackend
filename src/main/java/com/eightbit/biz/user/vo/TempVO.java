@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class TempVO {
     private String email;
-    private int authNum;
+    private String authNum;
 }

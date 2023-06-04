@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -27,6 +28,8 @@ public class MailSendServiceImpl implements MailSendService{
     @Qualifier("userMyBatisDAO")
     private UserMyBatisDAO userMyBatisDAO;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
     private int authNumber;
 
 
@@ -64,8 +67,9 @@ public class MailSendServiceImpl implements MailSendService{
             helper.setText(content,true);
             System.out.println("내용 삽입");
             mailSender.send(message);
-            tempVO.setEmail(email);
-            tempVO.setAuthNum(authNumber);
+            tempVO.setEmail(encoder.encode(email));
+            tempVO.setAuthNum(encoder.encode(Integer.toString(authNumber)));
+            System.out.println(tempVO.getAuthNum());
             if(userMyBatisDAO.alreadyEmailTempCheck(email).equals("yes")){
                 return userMyBatisDAO.updateTempAuthNum(tempVO);
             }

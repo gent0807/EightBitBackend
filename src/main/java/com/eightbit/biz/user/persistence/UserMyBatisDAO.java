@@ -122,7 +122,7 @@ public class UserMyBatisDAO {
 
     public String checkRightAuthNum(TempVO tempVO){
         int auth=mybatis.selectOne("UserMyBatisDAO.getAuthNum", tempVO.getEmail());
-        if(auth==tempVO.getAuthNum()){
+        if(Integer.valueOf(tempVO.getAuthNum()).equals(auth)){
             return JWTUtil.createJWT("TEMP2", secretKey, expiredMs);
         }
         else{

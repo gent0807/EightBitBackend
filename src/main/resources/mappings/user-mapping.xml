@@ -12,7 +12,7 @@
         select* from auth_temp
     </select>
 
-    <select id="getAuthNum" resultType="_int">
+    <select id="getAuthNum" resultType="string">
         select auth_key from auth_temp where email=#{email}
     </select>
 
