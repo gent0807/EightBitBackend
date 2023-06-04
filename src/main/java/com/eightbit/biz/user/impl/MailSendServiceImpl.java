@@ -67,14 +67,15 @@ public class MailSendServiceImpl implements MailSendService{
             helper.setText(content,true);
             System.out.println("내용 삽입");
             mailSender.send(message);
-            tempVO.setEmail(encoder.encode(email));
             tempVO.setAuthNum(encoder.encode(Integer.toString(authNumber)));
-            System.out.println(tempVO.getAuthNum());
-            if(userMyBatisDAO.alreadyEmailTempCheck(email).equals("yes")){
-                return userMyBatisDAO.updateTempAuthNum(tempVO);
+            String check= userMyBatisDAO.alreadyEmailTempCheck(email);
+            if(check.equals("no")){
+                tempVO.setEmail(encoder.encode(email));
+                return userMyBatisDAO.insertTempUser(tempVO);
             }
             else{
-                return userMyBatisDAO.insertTempUser(tempVO);
+                tempVO.setEmail(check);
+                return userMyBatisDAO.updateTempAuthNum(tempVO);
             }
         } catch (MessagingException e) {
             System.out.println("이메일 전송 실패");

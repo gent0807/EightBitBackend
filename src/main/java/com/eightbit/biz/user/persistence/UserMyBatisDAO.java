@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -19,6 +20,9 @@ public class UserMyBatisDAO {
     @Qualifier("sqlSessionTemplate")
     private SqlSessionTemplate mybatis;
 
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
     @Value("${jwt.secret}")
     private String secretKey;
     private Long expiredMs= 1000*60*60l;
@@ -28,7 +32,7 @@ public class UserMyBatisDAO {
         List<UserVO> userVOList=mybatis.selectList("UserMyBatisDAO.getUserList");
         System.out.println(userVOList);
         for(UserVO user:userVOList){
-            if(user.getEmail().equals(email)){
+            if(encoder.matches(email, user.getEmail())){
                 alreadyEmailRegister="yes";
                 break;
             }
@@ -41,9 +45,8 @@ public class UserMyBatisDAO {
         List<TempVO> tempVOList=mybatis.selectList("UserMyBatisDAO.getTempList");
         System.out.println(tempVOList);
         for(TempVO temp:tempVOList){
-            if(temp.getEmail().equals(email)){
-                alreadyEmailRegister="yes";
-                break;
+            if(encoder.matches(email, temp.getEmail())){
+                return temp.getEmail();
             }
         }
         return alreadyEmailRegister;
@@ -62,8 +65,14 @@ public class UserMyBatisDAO {
         return alreadyNickRegister;
     }
     public String insertUser(UserVO userVO) {
-        mybatis.delete("UserMyBatisDAO.deleteTempRow", userVO.getEmail());
-        mybatis.insert("UserMyBatisDAO.insertUser", userVO);
+        List<TempVO> tempVOList=mybatis.selectList("UserMyBatisDAO.getTempList");
+        for(TempVO temp:tempVOList){
+            if(encoder.matches(userVO.getEmail(), temp.getEmail())){
+                mybatis.delete("UserMyBatisDAO.deleteTempRow", temp.getEmail());
+                userVO.setEmail(encoder.encode(userVO.getEmail()));
+                mybatis.insert("UserMyBatisDAO.insertUser", userVO);
+            }
+        }
         return "";
     }
 
@@ -72,10 +81,13 @@ public class UserMyBatisDAO {
         List<UserVO> userVOList=mybatis.selectList("UserMyBatisDAO.getUserList");
         String email=userVO.getEmail();
         String password=userVO.getPassword();
+        System.out.println(password);
         for(UserVO user:userVOList){
-            if(user.getEmail().equals(email)){
+            if(encoder.matches(email, user.getEmail())){
                 result="emailok";
-                if(user.getPassword().equals(password)){
+                String key=mybatis.selectOne("UserMyBatisDAO.getPassword", user.getEmail());
+                System.out.println(key);
+                if(encoder.matches(password,key)){
                     result=JWTUtil.createJWT(userVO.getNickname(), secretKey, expiredMs); //JWTUtil 클래스의 static 메소드
                     break;
                 }
@@ -91,20 +103,28 @@ public class UserMyBatisDAO {
         String alreadyPasswordUsing="no";
         List<UserVO> userVOList=mybatis.selectList("UserMyBatisDAO.getUserList");
         for(UserVO user:userVOList){
-            if(user.getEmail().equals(userVO.getEmail())){
-                if(user.getPassword().equals(userVO.getPassword())){
+            if(encoder.matches(userVO.getEmail(),user.getEmail())){
+                String key=mybatis.selectOne("UserMyBatisDAO.getPassword", user.getEmail());
+                if(encoder.matches(userVO.getPassword(), key)){
                     return alreadyPasswordUsing="yes";
                 }
             }
         }
         return alreadyPasswordUsing;
     }
-    public void updateUserPw(UserVO userVO){
-        mybatis.update("UserMyBatisDAO.updateUserPw", userVO);
+    public String updateUserPw(UserVO userVO){
+        List<UserVO> userVOList=mybatis.selectList("UserMyBatisDAO.getUserList");
+        for(UserVO user:userVOList){
+            if(encoder.matches(userVO.getEmail(),user.getEmail())){
+                userVO.setEmail(user.getEmail());
+                mybatis.update("UserMyBatisDAO.updateUserPw", userVO);
+            }
+        }
+        return "";
     }
 
     public String updateTempAuthNum(TempVO tempVO){
-        mybatis.update("UserMyBatisDAO.updateTempAuthNum",tempVO);
+        mybatis.update("UserMyBatisDAO.updateTempAuthNum", tempVO);
         return JWTUtil.createJWT("TEMP1",secretKey,expiredMs);
     }
     public void deleteUser(String email){
@@ -121,12 +141,18 @@ public class UserMyBatisDAO {
     }
 
     public String checkRightAuthNum(TempVO tempVO){
-        int auth=mybatis.selectOne("UserMyBatisDAO.getAuthNum", tempVO.getEmail());
-        if(Integer.valueOf(tempVO.getAuthNum()).equals(auth)){
-            return JWTUtil.createJWT("TEMP2", secretKey, expiredMs);
+        System.out.println(tempVO.getAuthNum());
+        System.out.println(tempVO.getEmail());
+        List<TempVO> tempVOList=mybatis.selectList("UserMyBatisDAO.getTempList");
+        for(TempVO temp:tempVOList){
+            if(encoder.matches(tempVO.getEmail(), temp.getEmail())){
+                String auth_key=mybatis.selectOne("UserMyBatisDAO.getAuthNum", temp.getEmail());
+                if(encoder.matches(tempVO.getAuthNum(),auth_key)){
+                    return JWTUtil.createJWT("TEMP2", secretKey, expiredMs);
+                }
+            }
         }
-        else{
-            return "no";
-        }
+        return "no";
+
     }
 }

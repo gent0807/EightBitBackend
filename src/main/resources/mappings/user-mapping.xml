@@ -9,11 +9,15 @@
     </select>
 
     <select id="getTempList" resultType="temp">
-        select* from auth_temp
+        select * from auth_temp
     </select>
 
     <select id="getAuthNum" resultType="string">
         select auth_key from auth_temp where email=#{email}
+    </select>
+
+    <select id="getPassword" resultType="string">
+        select password from user where email=#{email}
     </select>
 
     <select id="getRole" resultType="string">

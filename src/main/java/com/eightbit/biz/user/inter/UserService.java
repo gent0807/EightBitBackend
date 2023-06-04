@@ -10,7 +10,7 @@ import com.eightbit.biz.user.vo.UserVO;
         public String insertUser(UserVO userVO);
         public String loginCheck(UserVO userVO);
         public String alreadyPasswordUsingCheck(UserVO userVO);
-        public void updateUserPw(UserVO userVO);
+        public String updateUserPw(UserVO userVO);
         public void deleteUser(String param);
 
         public String checkRightAuthNum(TempVO tempVO);

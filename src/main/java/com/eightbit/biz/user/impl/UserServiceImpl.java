@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
     public String insertUser(UserVO userVO){
         userVO.setPassword(encoder.encode(userVO.getPassword()));
         return userMyBatisDAO.insertUser(userVO);
-
     }
     public String loginCheck(UserVO userVO){
         return userMyBatisDAO.loginCheck(userVO);
@@ -47,8 +46,9 @@ public class UserServiceImpl implements UserService {
             return userMyBatisDAO.alreadyPasswordUsingCheck(userVO);
     }
 
-    public void updateUserPw(UserVO userVO){
-        userMyBatisDAO.updateUserPw(userVO);
+    public String updateUserPw(UserVO userVO){
+        userVO.setPassword(encoder.encode(userVO.getPassword()));
+        return userMyBatisDAO.updateUserPw(userVO);
     }
 
     public void deleteUser(String param){
@@ -60,8 +60,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public String checkRightAuthNum(TempVO tempVO){
-        tempVO.setEmail(encoder.encode(tempVO.getEmail()));
-        tempVO.setAuthNum(encoder.encode(tempVO.getAuthNum()));
         return userMyBatisDAO.checkRightAuthNum(tempVO);
     }
 

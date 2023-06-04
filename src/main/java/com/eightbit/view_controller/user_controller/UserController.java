@@ -71,8 +71,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/password")
-    public void updateUserPw(@RequestBody UserVO userVO){
-        userService.updateUserPw(userVO);
+    public String updateUserPw(@RequestBody UserVO userVO){
+        return userService.updateUserPw(userVO);
     }
 
 
