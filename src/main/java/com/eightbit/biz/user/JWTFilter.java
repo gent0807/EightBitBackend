@@ -30,15 +30,19 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
         final String authorization= request.getHeader(HttpHeaders.AUTHORIZATION);
+        System.out.println(authorization);
 
         //Token을 보내지 않거나 올바른 형식이 아닌 경우 소거
         if(authorization==null || !authorization.startsWith("Bearer ")){
             filterChain.doFilter(request, response);
+            System.out.println("xxxxxxxxxxxx");
             return;
         }
-
         //헤더의 AUTHORIZATION 필드에서 토큰 꺼내기
         String token=authorization.split(" ")[1];
+
+        System.out.println(token);
+
 
         //Token 만료 여부 파악
         if(JWTUtil.isExpired(token, secretKey)){ //JWTUtil 클래스의 static 메소드
@@ -48,7 +52,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String userName=JWTUtil.getUserName(token, secretKey); //JWTUtil 클래스의 static 메소드
 
-        String role;
+        String role="";
 
         if(userName.equals("TEMP1")){
             role="TEMP1";

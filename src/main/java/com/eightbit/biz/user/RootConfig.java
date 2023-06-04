@@ -19,17 +19,17 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = {"com.eightbit.biz"})
-@PropertySource("classpath:database.properties")
-@MapperScan(basePackages = {"com.eightbit.biz.user.persistence", "com.eightbit.biz.board.persistence"})
-public class RootConfig {
-    @Autowired
-    Environment env;
+    @ComponentScan(basePackages = {"com.eightbit.biz"})
+    @PropertySource("classpath:database.properties")
+    @MapperScan(basePackages = {"com.eightbit.biz.user.persistence", "com.eightbit.biz.board.persistence"})
+    public class RootConfig {
+        @Autowired
+        Environment env;
 
-    @Autowired
-    ApplicationContext applicationContext;
+        @Autowired
+        ApplicationContext applicationContext;
 
-    @Bean
+        @Bean
     public DataSource dataSource(){
         BasicDataSource basicDataSource=new BasicDataSource();
         basicDataSource.setDriverClassName(env.getProperty("jdbc.driver"));

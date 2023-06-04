@@ -23,12 +23,6 @@ public class UserMyBatisDAO {
     private String secretKey;
     private Long expiredMs= 1000*60*60l;
 
-    @Value("${jwt.temp1}")
-    private String temp1;
-
-    @Value("${jwt.temp2}")
-    private String temp2;
-
     public String alreadyEmailRegisterCheck(String email){
         String alreadyEmailRegister="no";
         List<UserVO> userVOList=mybatis.selectList("UserMyBatisDAO.getUserList");
@@ -111,7 +105,7 @@ public class UserMyBatisDAO {
 
     public String updateTempAuthNum(TempVO tempVO){
         mybatis.update("UserMyBatisDAO.updateTempAuthNum",tempVO);
-        return JWTUtil.createJWT(temp1,secretKey,expiredMs);
+        return JWTUtil.createJWT("TEMP1",secretKey,expiredMs);
     }
     public void deleteUser(String email){
         mybatis.delete("UserMyBatisDAO.deleteUser", email);
@@ -123,15 +117,13 @@ public class UserMyBatisDAO {
 
     public String insertTempUser(TempVO tempVO){
         mybatis.insert("UserMyBatisDAO.insertTempUser", tempVO);
-        return JWTUtil.createJWT(temp1, secretKey, expiredMs);
+        return JWTUtil.createJWT("TEMP1", secretKey, expiredMs);
     }
 
     public String checkRightAuthNum(TempVO tempVO){
         int auth=mybatis.selectOne("UserMyBatisDAO.getAuthNum", tempVO.getEmail());
-        System.out.println("디비에 저장된 인증키"+auth);
-        System.out.println("클라이언트가 보낸 숫자"+tempVO.getAuthNum());
         if(auth==tempVO.getAuthNum()){
-            return JWTUtil.createJWT(temp2, secretKey, expiredMs);
+            return JWTUtil.createJWT("TEMP2", secretKey, expiredMs);
         }
         else{
             return "no";

@@ -12,11 +12,11 @@
         select* from auth_temp
     </select>
 
-    <select id="getAuthNum">
+    <select id="getAuthNum" resultType="_int">
         select auth_key from auth_temp where email=#{email}
     </select>
 
-    <select id="getRole">
+    <select id="getRole" resultType="string">
         select role from user where nickname=#{userName}
     </select>
 
