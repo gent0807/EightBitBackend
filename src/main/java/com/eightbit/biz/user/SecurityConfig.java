@@ -37,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers(HttpMethod.OPTIONS, "/Users/**","/Board/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/Users/check/**","/Users/auth/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/Users/check/authkey").access("hasRole('TEMP1')")
-                .antMatchers(HttpMethod.POST, "/Users/user").access("hasRole('TEMP2')")
+                .antMatchers(HttpMethod.POST, "/Users/user/**").access("hasRole('TEMP2')")
                 .antMatchers(HttpMethod.POST, "/Board/**").authenticated()
                 .antMatchers(HttpMethod.PUT, "/Users/**","/Board/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "Users/**","Board/**").authenticated().and()

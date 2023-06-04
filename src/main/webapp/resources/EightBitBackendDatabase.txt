@@ -24,18 +24,32 @@ CREATE TABLE `board`(
   PRIMARY KEY (`seq`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-insert into user(email,password,nickname) values ('theloopholesnk@gmail.com','dbstjqdl7*!', '운영자');
-insert into board(title, content, writer, regdate, updatedate) values('환영합니다. 8비트입니다', '안녕하세요. 8비트입니다','운영자', now(),now());
+CREATE TABLE `auth_temp`(
+	`email` varchar(50) NOT NULL,
+    `auth_key` int(50) NOT NULL,
+	 PRIMARY KEY (`email`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+set sql_safe_updates = 0;
+
+insert into user(email,password,nickname) values ('yunseobsin6@gmail.com','dbstjqdl7*!', '섭이');
+insert into user(email,password,nickname) values ('tlsdbstjq95@naver.com','sys9587*!', '섭섭');
+insert into board(title, content, regdate, updatedate) values('환영합니다. 8비트입니다', '안녕하세요. 8비트입니다', now(),now());
 insert into board(title, content, writer, regdate, updatedate) values('안내드립니다.', '안내드립니다.', '운영자', now(),now());
 
 select * from user;
 select * from board;
+select * from auth_temp;
 
 ALTER TABLE board MODIFY seq INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE board AUTO_INCREMENT=1;
-
-delete from board where writer='운영자';
-
-DROP table board;
+ALTER TABLE user ADD role varchar(20) not null after nickname;
 
 update board set writer='운영자' where seq=1;
+update user set nickname='섭섭' where nickname='동양';
+
+delete from user where nickname='ㅇ';
+delete from board where seq=3;
+delete from user where email='yunseobsin6@gmail.com';
+
+drop table board;

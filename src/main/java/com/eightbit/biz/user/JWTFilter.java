@@ -60,6 +60,8 @@ public class JWTFilter extends OncePerRequestFilter {
             role=userService.findRoleFromNick(userName);
         }
 
+        System.out.println(role);
+
         UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(userName, null, List.of(new SimpleGrantedAuthority(role)));
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
