@@ -19,7 +19,6 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@Import({MailAuthConfiguration.class})
 @ComponentScan(basePackages = {"com.eightbit.biz"})
 @PropertySource("classpath:database.properties")
 @MapperScan(basePackages = {"com.eightbit.biz.user.persistence", "com.eightbit.biz.board.persistence"})
