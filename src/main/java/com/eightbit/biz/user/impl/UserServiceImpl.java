@@ -3,6 +3,7 @@ package com.eightbit.biz.user.impl;
 import com.eightbit.biz.user.inter.UserService;
 import com.eightbit.biz.user.persistence.UserMyBatisDAO;
 import com.eightbit.biz.user.persistence.UserSpringDAO;
+import com.eightbit.biz.user.vo.PhoneVO;
 import com.eightbit.biz.user.vo.TempVO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,10 @@ public class UserServiceImpl implements UserService {
         userMyBatisDAO.deleteUser(param);
     }
 
+    public String deletePhoneNum(String phoneNum){
+        return userMyBatisDAO.deletePhoneNum(phoneNum);
+    }
+
     public String findRoleFromNick(String userName){
         return userMyBatisDAO.findRoleFromNick(userName);
     }
@@ -63,5 +68,8 @@ public class UserServiceImpl implements UserService {
         return userMyBatisDAO.checkRightAuthNum(tempVO);
     }
 
+    public String checkRightPhoneAuthNum(PhoneVO phoneVO){
+        return userMyBatisDAO.checkRightPhoneAuthNum(phoneVO);
+    }
 
 }

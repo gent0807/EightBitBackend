@@ -1,6 +1,7 @@
 package com.eightbit.biz.user.persistence;
 
 import com.eightbit.biz.user.util.JWTUtil;
+import com.eightbit.biz.user.vo.PhoneVO;
 import com.eightbit.biz.user.vo.TempVO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -50,6 +51,20 @@ public class UserMyBatisDAO {
             }
         }
         return alreadyEmailRegister;
+    }
+
+    public String alreadyPhoneTempCheck(String phoneNumber){
+        String alreadyPhoneRegister="no";
+        List<PhoneVO> phoneVOList=mybatis.selectList("UserMyBatisDAO.getPhoneList");
+        System.out.println(phoneVOList);
+        for(PhoneVO phone:phoneVOList){
+            if(encoder.matches(phoneNumber, phone.getPhoneNum()))
+            {
+                    return phone.getPhoneNum();
+            }
+        }
+
+        return alreadyPhoneRegister;
     }
 
     public String alreadyNickRegisterCheck(String nickname){
@@ -127,8 +142,28 @@ public class UserMyBatisDAO {
         mybatis.update("UserMyBatisDAO.updateTempAuthNum", tempVO);
         return JWTUtil.createJWT("TEMP1",secretKey,expiredMs);
     }
+
+    public String updateTempPhone(PhoneVO phoneVO){
+        mybatis.update("UserMyBatisDAO.updatePhone", phoneVO);
+        return JWTUtil.createJWT("TEMP0",secretKey,expiredMs);
+    }
+
     public void deleteUser(String email){
         mybatis.delete("UserMyBatisDAO.deleteUser", email);
+    }
+
+    public String deletePhoneNum(String phoneNum){
+        List<PhoneVO> phoneVOList=mybatis.selectList("UserMyBatisDAO.getPhoneList");
+        for(PhoneVO phone:phoneVOList){
+            if(encoder.matches(phoneNum, phone.getPhoneNum())){
+                System.out.println(phone.getPhoneNum());
+                System.out.println(phoneNum);
+                mybatis.delete("UserMyBatisDAO.deletePhoneRow", phone.getPhoneNum());
+                System.out.println("번호 삭제");
+                return JWTUtil.createJWT("POSSIBLESIGN", secretKey, expiredMs);
+            }
+        }
+        return "fail";
     }
 
     public String findRoleFromNick(String userName){
@@ -140,6 +175,11 @@ public class UserMyBatisDAO {
         return JWTUtil.createJWT("TEMP1", secretKey, expiredMs);
     }
 
+    public String insertTempPhone(PhoneVO phoneVO){
+        mybatis.insert("UserMyBatisDAO.insertPhone", phoneVO);
+        return JWTUtil.createJWT("TEMP0", secretKey, expiredMs);
+    }
+
     public String checkRightAuthNum(TempVO tempVO){
         System.out.println(tempVO.getAuthNum());
         System.out.println(tempVO.getEmail());
@@ -149,6 +189,22 @@ public class UserMyBatisDAO {
                 String auth_key=mybatis.selectOne("UserMyBatisDAO.getAuthNum", temp.getEmail());
                 if(encoder.matches(tempVO.getAuthNum(),auth_key)){
                     return JWTUtil.createJWT("TEMP2", secretKey, expiredMs);
+                }
+            }
+        }
+        return "no";
+
+    }
+
+    public String checkRightPhoneAuthNum(PhoneVO phoneVO){
+        System.out.println(phoneVO.getAuthNum());
+        System.out.println(phoneVO.getPhoneNum());
+        List<PhoneVO> phoneVOList=mybatis.selectList("UserMyBatisDAO.getPhoneList");
+        for(PhoneVO phone:phoneVOList){
+            if(encoder.matches(phoneVO.getPhoneNum(), phone.getPhoneNum())){
+                String auth_key=mybatis.selectOne("UserMyBatisDAO.getPhoneAuthNum", phone.getPhoneNum());
+                if(encoder.matches(phoneVO.getAuthNum(),auth_key)){
+                    return JWTUtil.createJWT("TEMP0", secretKey, expiredMs);
                 }
             }
         }

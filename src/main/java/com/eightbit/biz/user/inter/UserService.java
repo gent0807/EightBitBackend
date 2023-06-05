@@ -1,5 +1,6 @@
 package com.eightbit.biz.user.inter;
 
+import com.eightbit.biz.user.vo.PhoneVO;
 import com.eightbit.biz.user.vo.TempVO;
 import com.eightbit.biz.user.vo.UserVO;
 
@@ -13,7 +14,9 @@ import com.eightbit.biz.user.vo.UserVO;
         public String updateUserPw(UserVO userVO);
         public void deleteUser(String param);
 
+        public String deletePhoneNum(String phoneNum);
         public String checkRightAuthNum(TempVO tempVO);
+        public String checkRightPhoneAuthNum(PhoneVO phoneVO);
 
 
 }

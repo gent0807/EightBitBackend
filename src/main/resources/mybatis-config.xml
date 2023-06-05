@@ -8,6 +8,7 @@
         <typeAlias alias="board" type="com.eightbit.biz.board.vo.BoardVO" />
         <typeAlias alias="user"  type="com.eightbit.biz.user.vo.UserVO" />
         <typeAlias alias="temp" type="com.eightbit.biz.user.vo.TempVO"/>
+        <typeAlias alias="phone" type="com.eightbit.biz.user.vo.PhoneVO"/>
     </typeAliases>
 
 

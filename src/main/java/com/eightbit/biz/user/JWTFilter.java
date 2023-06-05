@@ -54,11 +54,17 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String role="";
 
-        if(userName.equals("TEMP1")){
+        if(userName.equals("TEMP0")){
+            role="TEMP0";
+        }
+        else if(userName.equals("TEMP1")){
             role="TEMP1";
         }
         else if(userName.equals("TEMP2")){
             role="TEMP2";
+        }
+        else if(userName.equals("POSSIBLESIGN")){
+            role="POSSIBLESIGN";
         }
         else{
             role=userService.findRoleFromNick(userName);

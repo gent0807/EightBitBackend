@@ -1,7 +1,9 @@
 package com.eightbit.view_controller.user_controller;
 
 import com.eightbit.biz.user.inter.MailSendService;
+import com.eightbit.biz.user.inter.PhoneSendService;
 import com.eightbit.biz.user.inter.UserService;
+import com.eightbit.biz.user.vo.PhoneVO;
 import com.eightbit.biz.user.vo.TempVO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,11 @@ public class UserController {
     @Qualifier("mailSendService")
     private MailSendService mailSendService;
 
-    /*
     @Autowired
     @Qualifier("phoneSendService")
     private PhoneSendService phoneSendService;
-     */
+
+
 
     @PostMapping(value = "/check/email/already")
     public ResponseEntity<String> alreadyEmailRegisterCheck(@RequestBody UserVO userVO){
@@ -53,6 +55,11 @@ public class UserController {
     @PostMapping(value="/check/authkey")
     public ResponseEntity<String> checkRightAuthNum(@RequestBody TempVO tempVO){
         return ResponseEntity.ok().body(userService.checkRightAuthNum(tempVO));
+    }
+
+    @PostMapping(value="/check/phonekey")
+    public ResponseEntity<String> checkRightPhoneAuthNum(@RequestBody PhoneVO phoneVO){
+        return ResponseEntity.ok().body(userService.checkRightPhoneAuthNum(phoneVO));
     }
 
     @PostMapping(value = "/user")
@@ -81,6 +88,11 @@ public class UserController {
         userService.deleteUser(param);
     }
 
+    @DeleteMapping(value="/phone")
+    public String deletePhoneNum(@RequestBody PhoneVO phoneVO){
+        return userService.deletePhoneNum(phoneVO.getPhoneNum());
+    }
+
 
     @PostMapping(value = "/authkey/email")
     public ResponseEntity<String> sendAuthNumToEmail(@RequestBody UserVO userVO){
@@ -88,14 +100,12 @@ public class UserController {
     }
 
 
-
-    /*
     @PostMapping(value = "/authkey/phone")
-    public ResponseEntity<String> sendAuthNumToPhone(@RequestBody UserVO userVO){
-        String authkey=phoneSendService.phoneSend(userVO.getEmail());
-        return ResponseEntity.ok().body(authkey);
+    public ResponseEntity<String> sendAuthNumToPhone(@RequestBody PhoneVO phoneVO){
+
+        return ResponseEntity.ok().body(phoneSendService.phoneSend(phoneVO.getPhoneNum()));
     }
-    */
+
 
 
 
