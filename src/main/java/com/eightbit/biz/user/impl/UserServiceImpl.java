@@ -1,10 +1,15 @@
 package com.eightbit.biz.user.impl;
 
 import com.eightbit.biz.user.inter.UserService;
+import com.eightbit.biz.user.persistence.UserMyBatisDAO;
 import com.eightbit.biz.user.persistence.UserSpringDAO;
+import com.eightbit.biz.user.vo.PhoneVO;
+import com.eightbit.biz.user.vo.TempVO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service("userService")
@@ -14,33 +19,57 @@ public class UserServiceImpl implements UserService {
     @Qualifier("userSpringDAO")
     private UserSpringDAO userSpringDAO;
 
-    public String alreadyEmailRegisterCheck(String email,String alreadyEmailRegister){
+    @Autowired
+    @Qualifier("userMyBatisDAO")
+    private UserMyBatisDAO userMyBatisDAO;
+
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    public String alreadyEmailRegisterCheck(String email){
         System.out.println(email);
-        alreadyEmailRegister= userSpringDAO.alreadyEmailRegisterCheck(email,alreadyEmailRegister);
-        return alreadyEmailRegister;
+        return userMyBatisDAO.alreadyEmailRegisterCheck(email);
     }
-    public String alreadyNickRegisterCheck(String nickname,String alreadyNickRegister){
+    public String alreadyNickRegisterCheck(String nickname){
         System.out.println(nickname);
-        alreadyNickRegister= userSpringDAO.alreadyNickRegisterCheck(nickname,alreadyNickRegister);
-        return alreadyNickRegister;
+        return userMyBatisDAO.alreadyNickRegisterCheck(nickname);
     }
-    public void insertUser(UserVO userVO){
-
-        userSpringDAO.insertUser(userVO);
-
+    public String insertUser(UserVO userVO){
+        userVO.setPassword(encoder.encode(userVO.getPassword()));
+        return userMyBatisDAO.insertUser(userVO);
     }
-    public String loginCheck(UserVO userVO,String loginPossible){
-            loginPossible= userSpringDAO.loginCheck(userVO,loginPossible);
-            return loginPossible;
+    public String loginCheck(UserVO userVO){
+        return userMyBatisDAO.loginCheck(userVO);
     }
 
-    public void updateUser(UserVO userVO){
-        userSpringDAO.updateUser(userVO);
+    public String alreadyPasswordUsingCheck(UserVO userVO){
+            return userMyBatisDAO.alreadyPasswordUsingCheck(userVO);
+    }
+
+    public String updateUserPw(UserVO userVO){
+        userVO.setPassword(encoder.encode(userVO.getPassword()));
+        return userMyBatisDAO.updateUserPw(userVO);
     }
 
     public void deleteUser(String param){
-        userSpringDAO.deleteUser(param);
+        userMyBatisDAO.deleteUser(param);
     }
 
+    public String deletePhoneNum(String phoneNum){
+        return userMyBatisDAO.deletePhoneNum(phoneNum);
+    }
+
+    public String findRoleFromNick(String userName){
+        return userMyBatisDAO.findRoleFromNick(userName);
+    }
+
+    public String checkRightAuthNum(TempVO tempVO){
+        return userMyBatisDAO.checkRightAuthNum(tempVO);
+    }
+
+    public String checkRightPhoneAuthNum(PhoneVO phoneVO){
+        return userMyBatisDAO.checkRightPhoneAuthNum(phoneVO);
+    }
 
 }

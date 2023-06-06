@@ -1,21 +1,20 @@
 package com.eightbit.view_controller.user_controller;
 
 import com.eightbit.biz.user.inter.MailSendService;
+import com.eightbit.biz.user.inter.PhoneSendService;
 import com.eightbit.biz.user.inter.UserService;
+import com.eightbit.biz.user.vo.PhoneVO;
+import com.eightbit.biz.user.vo.TempVO;
 import com.eightbit.biz.user.vo.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.*;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/user/*")
+@RequestMapping("/Users/*")
 public class UserController {
 
     @Autowired
@@ -26,57 +25,87 @@ public class UserController {
     @Qualifier("mailSendService")
     private MailSendService mailSendService;
 
-    @PostMapping(value = "/alreadyEmailRegisterCheck")
-    public String alreadyEmailRegisterCheck(@RequestBody UserVO userVO){
+    @Autowired
+    @Qualifier("phoneSendService")
+    private PhoneSendService phoneSendService;
+
+
+
+    @PostMapping(value = "/check/email/already")
+    public ResponseEntity<String> alreadyEmailRegisterCheck(@RequestBody UserVO userVO){
         System.out.println("이메일 존재 확인 요청 접수");
         System.out.println(userVO);
-        String alreadyEmailRegister="no";
-        alreadyEmailRegister=userService.alreadyEmailRegisterCheck(userVO.getEmail(),alreadyEmailRegister);
-        return alreadyEmailRegister;
+        return ResponseEntity.ok().body(userService.alreadyEmailRegisterCheck(userVO.getEmail()));
     }
 
-    @PostMapping(value = "/alreadyNickRegisterCheck")
-    public String alreadyNickRegisterCheck(@RequestBody UserVO userVO){
+    @PostMapping(value = "/check/nick/already")
+    public ResponseEntity<String> alreadyNickRegisterCheck(@RequestBody UserVO userVO){
         System.out.println("닉네임 존재 확인 요청 접수");
         System.out.println(userVO);
-        String alreadyNickRegister="no";
-        alreadyNickRegister=userService.alreadyNickRegisterCheck(userVO.getNickname(),alreadyNickRegister);
-        return alreadyNickRegister;
-    }
-    @PostMapping(value = "/insert")
-    public void insertUser(@RequestBody UserVO userVO){
-        userService.insertUser(userVO);
+        return ResponseEntity.ok().body(userService.alreadyNickRegisterCheck(userVO.getNickname()));
     }
 
-    @PostMapping(value = "/loginCheck")
-    public String loginCheck(@RequestBody UserVO userVO){
+    @PostMapping(value = "/check/password/already")
+    public ResponseEntity<String> alreadyPasswordUsingCheck(@RequestBody UserVO userVO){
+        System.out.println("패스워드 중복 검사 요청 접수");
+        System.out.println(userVO);
+        return ResponseEntity.ok().body(userService.alreadyPasswordUsingCheck(userVO));
+    }
+
+    @PostMapping(value="/check/authkey")
+    public ResponseEntity<String> checkRightAuthNum(@RequestBody TempVO tempVO){
+        return ResponseEntity.ok().body(userService.checkRightAuthNum(tempVO));
+    }
+
+    @PostMapping(value="/check/phonekey")
+    public ResponseEntity<String> checkRightPhoneAuthNum(@RequestBody PhoneVO phoneVO){
+        return ResponseEntity.ok().body(userService.checkRightPhoneAuthNum(phoneVO));
+    }
+
+    @PostMapping(value = "/user")
+    public ResponseEntity<String> insertUser(@RequestBody UserVO userVO){
+        System.out.println("회원가입 요청 접수");
+        System.out.println(userVO);
+        return ResponseEntity.ok().body(userService.insertUser(userVO));
+    }
+
+
+    @PostMapping(value = "/check/login")
+    public ResponseEntity<String> loginCheck(@RequestBody UserVO userVO){
         System.out.println("로그인 시도 요청 접수");
         System.out.println(userVO);
-        String loginPossible="no";
-        loginPossible=userService.loginCheck(userVO,loginPossible);
-        return loginPossible;
+        return ResponseEntity.ok().body(userService.loginCheck(userVO));
     }
 
-    @PutMapping(value = "/update")
-    public void updateUser(@RequestBody UserVO userVO){
-        userService.updateUser(userVO);
+    @PutMapping(value = "/password")
+    public String updateUserPw(@RequestBody UserVO userVO){
+        return userService.updateUserPw(userVO);
     }
 
 
-    @DeleteMapping(value = "/delete/{param}")
+    @DeleteMapping(value = "/{param}")
     public void deleteUser(@PathVariable String param){
         userService.deleteUser(param);
     }
 
-    @PostMapping(value = "/send_num_to_email")
-    public String sendAuthNumToEmail(@RequestBody String email){
-        return mailSendService.sendAuthNumToEmail(email);
+    @DeleteMapping(value="/phone")
+    public String deletePhoneNum(@RequestBody PhoneVO phoneVO){
+        return userService.deletePhoneNum(phoneVO.getPhoneNum());
     }
 
-    @PostMapping(value = "/find_password")
-    public void sendPasswordToEmail(@RequestBody String email){
-        mailSendService.sendPasswordToEmail(email);
+
+    @PostMapping(value = "/authkey/email")
+    public ResponseEntity<String> sendAuthNumToEmail(@RequestBody UserVO userVO){
+         return ResponseEntity.ok().body(mailSendService.mailSend(userVO.getEmail()));
     }
+
+
+    @PostMapping(value = "/authkey/phone")
+    public ResponseEntity<String> sendAuthNumToPhone(@RequestBody PhoneVO phoneVO){
+
+        return ResponseEntity.ok().body(phoneSendService.phoneSend(phoneVO.getPhoneNum()));
+    }
+
 
 
 
